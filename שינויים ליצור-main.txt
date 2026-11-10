@@ -1,0 +1,17 @@
+.env
+FITNESS_TIMER_EXAM_NAME="108 מסלול פרט משולב (זמן הצלה)"
+
+----------------------------------------------
+
+docker-compose:
+fitness-assessment:
+    environment:
+      - FITNESS_TIMER_EXAM_NAME=${FITNESS_TIMER_EXAM_NAME}
+
+----------------------
+להריץ בMYSQL של פרוד
+E:\Projects\Kasham\KashamServer\services\sql-init\migrations\022_add_status_to_tblfitnessassessment.sql
+E:\Projects\Kasham\KashamServer\services\sql-init\migrations\023_create_tblfitnessextrafighters.sql
+
+--------------------
+

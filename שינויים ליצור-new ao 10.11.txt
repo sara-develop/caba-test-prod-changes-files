@@ -1,0 +1,52 @@
+API_URL=http://test-docker:9027/ask-once
+ASKONCE_BASE_URL=http://test-docker:9027/ask-once
+
+----------
+
+להריץ תחלופת עמודות מרכבה ID
+
+להריץ:
+-- 1. בדיקת ימי מבחן המשתמשים בצמד או באחד מהמזהים
+SELECT district, station, COUNT(*) AS cnt
+FROM tblExamDays
+WHERE district IN (61006556, 60004701) OR station IN (61006556, 60004701)
+GROUP BY district, station;
+
+-- 2. בדיקת תוצאות מבחנים
+SELECT examdaydistrict, examdaystation, COUNT(*) AS cnt
+FROM tblExamsResults
+WHERE examdaydistrict IN (61006556, 60004701) OR examdaystation IN (61006556, 60004701)
+GROUP BY examdaydistrict, examdaystation;
+
+-- 3. בדיקה אינפורמטיבית לטבלאות עובדים (אסור לעדכן את הטבלאות האלו)
+SELECT 'tblExamDayFighters' AS tbl, districtid, stationid, COUNT(*) AS cnt
+FROM tblExamDayFighters
+WHERE districtid IN (61006556, 60004701) OR stationid IN (61006556, 60004701)
+GROUP BY districtid, stationid
+UNION ALL
+SELECT 'tblFitnessExtraFighters', districtid, stationid, COUNT(*)
+FROM tblFitnessExtraFighters
+WHERE districtid IN (61006556, 60004701) OR stationid IN (61006556, 60004701)
+GROUP BY districtid, stationid;
+
+אם מ1-2 חוזר שורות, להריץ:
+START TRANSACTION;
+
+-- עדכון ימי מבחן: הפיכת נציבות ל-60004701 ולהבה ל-61006556
+UPDATE tblExamDays
+SET district = 60004701, station = 61006556
+WHERE district = 61006556 AND station = 60004701;
+
+-- עדכון תוצאות ימי מבחן
+UPDATE tblExamsResults
+SET examdaydistrict = 60004701, examdaystation = 61006556
+WHERE examdaydistrict = 61006556 AND examdaystation = 60004701;
+
+COMMIT;
+
+----------------------
+להריץ בMYSQL של פרוד
+E:\Projects\Kasham\KashamServer\services\sql-init\migrations\022_add_status_to_tblfitnessassessment.sql
+E:\Projects\Kasham\KashamServer\services\sql-init\migrations\023_create_tblfitnessextrafighters.sql
+
+--------------------
