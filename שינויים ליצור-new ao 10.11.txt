@@ -48,5 +48,23 @@ COMMIT;
 להריץ בMYSQL של פרוד
 E:\Projects\Kasham\KashamServer\services\sql-init\migrations\022_add_status_to_tblfitnessassessment.sql
 E:\Projects\Kasham\KashamServer\services\sql-init\migrations\023_create_tblfitnessextrafighters.sql
-
+E:\Projects\Kasham\KashamServer\services\sql-init\migrations\024_swap_netzivut_lehava_ids.sql
 --------------------
+
+
+
+
+----------
+הסרת נציבות/להבה הקשיחים (AODataService + KashamClient) - 2026-11-10:
+אין משתני סביבה חדשים ואין שינוי ב-docker-compose.
+לבנות מחדש (build, לא רק restart): aodata, kasham-client.
+לוודא שלאפליקציה יש הרשאה ב-AskOnce לקריאה: GET /ask-once/orgUnitsByTypes
+
+מיגרציה להריץ (MySQL, DB של Kasham):
+KashamServer/services/sql-init/migrations/024_swap_netzivut_lehava_ids.sql
+- לגבות את ה-DB לפני ההרצה.
+- חובה להריץ באותו deploy של הקוד (לא לפני ולא אחרי) - אחרת ימי בחינה קיימים של נציבות/להבה יוצגו בלי מחוז/תחנה.
+- בטוח להרצה חוזרת (נוגע רק בשורות עם הזוג הישן 61006556/60004701).
+בדיקה לפני ואחרי (קריאה בלבד) - אחרי ההרצה אמור להופיע רק 60004701 / 61006556:
+SELECT district, station, COUNT(*) FROM tblExamDays WHERE district IN (61006556, 60004701) OR station IN (61006556, 60004701) GROUP BY district, station;
+SELECT examdaydistrict, examdaystation, COUNT(*) FROM tblExamsResults WHERE examdaydistrict IN (61006556, 60004701) OR examdaystation IN (61006556, 60004701) GROUP BY examdaydistrict, examdaystation;
