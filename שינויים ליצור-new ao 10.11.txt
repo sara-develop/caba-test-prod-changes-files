@@ -1,5 +1,5 @@
-API_URL=http://test-docker:9027/ask-once
-ASKONCE_BASE_URL=http://test-docker:9027/ask-once
+API_URL=http://prod-docker:9027/ask-once
+ASKONCE_BASE_URL=http://prod-docker:9027/ask-once
 
 ----------
 
